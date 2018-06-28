@@ -36,7 +36,11 @@ let g:ackprg = 'ag --nogroup --nocolor --column'
 let g:auto_save = 1
 let g:auto_save_silent = 1
 let NERDTreeShowHidden = 1
-let ayucolor="light"  " for light version of theme
+
+colorscheme industry
+"colorscheme ayu
+
+"let ayucolor="light"  " for light version of theme
 "let ayucolor="mirage" " for mirage version of theme
 "let ayucolor="dark"   " for dark version of theme
 "
@@ -45,15 +49,13 @@ let g:ctrlp_prompt_mappings = {
     \ 'AcceptSelection("e")': ['<c-t>'],
     \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
     \ }
-
-"colorscheme industry
-colorscheme ayu
 au BufEnter *.rb syn match error contained "\<binding.pry\>"
 autocmd vimenter * NERDTree
 map <C-n> :NERDTreeToggle<CR>
 
 "shortcut to copy current file path to clipboard ctrl-shift-c
 map <C-C> :COP<CR>
+
 
 "alt-w for mac
 
@@ -62,6 +64,13 @@ map <C-C> :COP<CR>
 :nnoremap <F3> :source $MYVIMRC<CR>
 :nnoremap <F2> :edit $MYVIMRC<CR>
 
+" remap tabbing to shift tab
+" for command mode
+nnoremap <S-Tab> <<
+" for insert mode
+inoremap <S-Tab> <C-d>
+"causes conflict
+"inoremap <expr> <CR> pumvisible() ? "\<C-Y>" : "\<CR>"
 
 cd ~/gitrepo/introhive
 
@@ -124,6 +133,14 @@ Plugin 'ecomba/vim-ruby-refactoring'
 
 "highlight word under cursor
 Plugin 'pboettch/vim-highlight-cursor-words'
+
+"Auto save/load vim sessions based on directory and git branch.
+Plugin 'wting/gitsessions.vim'
+
+Plugin 'Shougo/unite.vim'
+
+Plugin 'tpope/vim-rbenv'
+Plugin 'tpope/gem-ctags'
 
 Bundle 'vim-ruby/vim-ruby'
 " Surround your code :)
