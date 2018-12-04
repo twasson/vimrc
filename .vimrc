@@ -4,7 +4,7 @@ set incsearch
 set smartcase
 set hlsearch  " highlight search items
 set noswapfile
-set tags=./.git/tags,tags;
+set tags=./tags;,./gems.tags;,./.git/tags;
 set autoindent expandtab smartindent smarttab tabstop=2 softtabstop=2 shiftwidth=2
 set diffopt+=vertical
 set showcmd
@@ -12,10 +12,12 @@ set showcmd
 set autoread
 set termguicolors     " enable true colors support
 set guioptions+=e
+"set autochdir "change to the current file's directory.
 
 "stop vim from adding EOL to bottom of file if missing workaround
 ":set binary
 ":set noeol
+set switchbuf+=newtab
 
 runtime macros/matchit.vim
 
@@ -26,6 +28,8 @@ filetype plugin on    " Enable filetype-specific plugins
 filetype plugin indent on    " required
 
 autocmd FileType ruby compiler ruby
+
+"copy file path to clipboard
 :command! COP let @+ = expand('%:p')
 
 
@@ -36,7 +40,11 @@ let g:ackprg = 'ag --nogroup --nocolor --column'
 let g:auto_save = 1
 let g:auto_save_silent = 1
 let NERDTreeShowHidden = 1
-
+let g:ctrlp_show_hidden = 1
+let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor -g ""'
+let g:ctrlp_use_caching = 0
+"let g:vim_tags_auto_generate = 1
+cnoreabbrev
 colorscheme industry
 "colorscheme ayu
 
@@ -50,19 +58,27 @@ let g:ctrlp_prompt_mappings = {
     \ 'AcceptSelection("t")': ['<cr>', '<2-LeftMouse>'],
     \ }
 au BufEnter *.rb syn match error contained "\<binding.pry\>"
-autocmd vimenter * NERDTree
+
+"open nerdtree by default
+"autocmd vimenter * NERDTree
+
 map <C-n> :NERDTreeToggle<CR>
+map <C-x> :g/binding\.pry/d<CR>
+nmap <leader>f :NERDTreeFind<CR>
 
 "shortcut to copy current file path to clipboard ctrl-shift-c
 map <C-C> :COP<CR>
+"map <C-K> :%bd\|e<CR>
 
 
 "alt-w for mac
 
 "map <C-m> <MiddleMouse>
-:nnoremap <F4> :Ack<CR>
+:nnoremap <F4> :Ack!<CR>
 :nnoremap <F3> :source $MYVIMRC<CR>
 :nnoremap <F2> :edit $MYVIMRC<CR>
+:nnoremap <leader>ct :silent ! ctags -R --languages=ruby --exclude=.git --exclude=log -f tags<cr>
+:nnoremap <leader>cc :CodeClimateAnalyzeCurrentFile<cr>
 
 " remap tabbing to shift tab
 " for command mode
@@ -71,6 +87,10 @@ nnoremap <S-Tab> <<
 inoremap <S-Tab> <C-d>
 "causes conflict
 "inoremap <expr> <CR> pumvisible() ? "\<C-Y>" : "\<CR>"
+
+"do not open first file from search results
+cnoreabbrev Ack Ack!
+nnoremap <Leader>a :Ack!<Space>
 
 cd ~/gitrepo/introhive
 
@@ -141,6 +161,19 @@ Plugin 'Shougo/unite.vim'
 
 Plugin 'tpope/vim-rbenv'
 Plugin 'tpope/gem-ctags'
+Plugin 'vim-scripts/ruby-matchit'
+
+"allow you to use :TestNearest to test on cusor
+Plugin 'janko-m/vim-test'
+
+"http://peterodding.com/code/vim/notes/
+Plugin 'xolox/vim-notes'
+Plugin 'vim-misc'
+
+":CodeClimateAnalyzeProject
+":CodeClimateAnalyzeOpenFiles
+":CodeClimateAnalyzeCurrentFile
+Plugin 'wfleming/vim-codeclimate'
 
 Bundle 'vim-ruby/vim-ruby'
 " Surround your code :)
