@@ -43,6 +43,7 @@ let NERDTreeShowHidden = 1
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor -g ""'
 let g:ctrlp_use_caching = 0
+let g:ctrlp_match_func = {'match' : 'matcher#cmatch' }
 "let g:vim_tags_auto_generate = 1
 cnoreabbrev
 colorscheme industry
@@ -169,6 +170,9 @@ Plugin 'janko-m/vim-test'
 "http://peterodding.com/code/vim/notes/
 Plugin 'xolox/vim-notes'
 Plugin 'vim-misc'
+
+"different ctrlp searching algorithm
+Plugin 'JazzCore/ctrlp-cmatcher'
 
 ":CodeClimateAnalyzeProject
 ":CodeClimateAnalyzeOpenFiles
