@@ -15,7 +15,7 @@ set guioptions+=e
 "set autochdir "change to the current file's directory.
 
 "stop vim from adding EOL to bottom of file if missing workaround
-":set binary
+":set binary<F3>
 ":set noeol
 set switchbuf+=newtab
 
@@ -40,11 +40,18 @@ let g:ackprg = 'ag --nogroup --nocolor --column'
 let g:auto_save = 1
 let g:auto_save_silent = 1
 let NERDTreeShowHidden = 1
+let NERDTreeMinimalUI = 1
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor -g ""'
 let g:ctrlp_use_caching = 0
-let g:ctrlp_match_func = {'match' : 'matcher#cmatch' }
+
+"broken
+"let g:ctrlp_match_func = {'match' : 'matcher#cmatch' }
 "let g:vim_tags_auto_generate = 1
+let g:syntastic_auto_loc_list = 0
+
+let g:better_whitespace_ctermcolor='red'
+"let g:strip_whitespace_on_save = 1
 cnoreabbrev
 colorscheme industry
 "colorscheme ayu
@@ -63,9 +70,13 @@ au BufEnter *.rb syn match error contained "\<binding.pry\>"
 "open nerdtree by default
 "autocmd vimenter * NERDTree
 
-map <C-n> :NERDTreeToggle<CR>
+map <C-n> :ToggleNERDTreeAndTagbar<CR>
 map <C-x> :g/binding\.pry/d<CR>
+map <C-w><C-s> :StripWhitespace<CR>
+map <C-f><C-j> :%!python -m json.tool<CR>
+map <C-s><C-c> :%s///gn<CR>
 nmap <leader>f :NERDTreeFind<CR>
+
 
 "shortcut to copy current file path to clipboard ctrl-shift-c
 map <C-C> :COP<CR>
@@ -78,9 +89,9 @@ map <C-C> :COP<CR>
 :nnoremap <F4> :Ack!<CR>
 :nnoremap <F3> :source $MYVIMRC<CR>
 :nnoremap <F2> :edit $MYVIMRC<CR>
+:nnoremap <F9> :copen<CR>
 :nnoremap <leader>ct :silent ! ctags -R --languages=ruby --exclude=.git --exclude=log -f tags<cr>
 :nnoremap <leader>cc :CodeClimateAnalyzeCurrentFile<cr>
-
 " remap tabbing to shift tab
 " for command mode
 nnoremap <S-Tab> <<
@@ -119,7 +130,10 @@ Plugin 'mileszs/ack.vim'
 Plugin 'skalnik/vim-vroom'
 Plugin 'tpope/vim-endwise' "Added end after def, if, do etc.
 Plugin 'szw/vim-tags'
+Plugin 'vim-scripts/ZoomWin'
+Plugin 'ntpeters/vim-better-whitespace'
 
+Plugin 'majutsushi/tagbar'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
@@ -128,9 +142,10 @@ Plugin 'szw/vim-tags'
 " Git plugin not hosted on GitHub
 Plugin 'git://git.wincent.com/command-t.git'
 " fuzzy file search
-Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'kien/ctrlp.vim'
 " file explorer (ctrl-n to open)Plugin
 Plugin 'scrooloose/nerdtree'
+Plugin 'pseewald/nerdtree-tagbar-combined'
 " The sparkup vim script is in a subdirectory of this repo called vim.
 " Pass the path to set the runtimepath properly.
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
@@ -140,7 +155,7 @@ Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 " Vim Ruby
 
 " Debug ruby
-Plugin 'joonty/vdebug'
+" Plugin 'joonty/vdebug'
 
 "auto save files
 Plugin 'vim-scripts/vim-auto-save'
@@ -162,7 +177,7 @@ Plugin 'Shougo/unite.vim'
 
 Plugin 'tpope/vim-rbenv'
 Plugin 'tpope/gem-ctags'
-Plugin 'vim-scripts/ruby-matchit'
+"Plugin 'vim-scripts/ruby-matchit'
 
 "allow you to use :TestNearest to test on cusor
 Plugin 'janko-m/vim-test'
@@ -178,6 +193,12 @@ Plugin 'JazzCore/ctrlp-cmatcher'
 ":CodeClimateAnalyzeOpenFiles
 ":CodeClimateAnalyzeCurrentFile
 Plugin 'wfleming/vim-codeclimate'
+
+Plugin 'tomtom/tcomment_vim'
+
+Plugin 'rafi/awesome-vim-colorschemes'
+
+Plugin 'vim-vdebug/vdebug'
 
 Bundle 'vim-ruby/vim-ruby'
 " Surround your code :)
