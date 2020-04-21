@@ -13,11 +13,24 @@ set autoread
 set termguicolors     " enable true colors support
 set guioptions+=e
 "set autochdir "change to the current file's directory.
+set nomodeline
 
 "stop vim from adding EOL to bottom of file if missing workaround
 ":set binary<F3>
 ":set noeol
 set switchbuf+=newtab
+
+"----syntax checker----
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+"----syntax checker----
 
 runtime macros/matchit.vim
 
@@ -28,6 +41,10 @@ filetype plugin on    " Enable filetype-specific plugins
 filetype plugin indent on    " required
 
 autocmd FileType ruby compiler ruby
+autocmd vimenter * if !argc() | NERDTree | endif
+
+" fix the file no longer available issue
+autocmd FileChangedShell * execute
 
 "copy file path to clipboard
 :command! COP let @+ = expand('%:p')
@@ -35,6 +52,10 @@ autocmd FileType ruby compiler ruby
 
 let g:ctrlp_working_path_mode = 0
 let g:airline#extensions#tabline#enabled = 1
+let g:session_autoload = 'yes'
+let g:session_autosave = 'yes'
+let g:session_autosave_periodic = 1
+let g:session_autosave_silent = 1
 let NERDTreeQuitOnOpen = 0
 let g:ackprg = 'ag --nogroup --nocolor --column'
 let g:auto_save = 1
@@ -45,12 +66,48 @@ let g:ctrlp_show_hidden = 1
 let g:ctrlp_user_command = 'ag %s -l --hidden --nocolor -g ""'
 let g:ctrlp_use_caching = 0
 
-"broken
+"side panel''''
+" Set position (left or right) if neccesary (default: "left").
+let g:sidepanel_pos = "left"
+" Set width if neccesary (default: 32)
+let g:sidepanel_width = 26
+
+" To use rabbit-ui.vim
+let g:sidepanel_use_rabbit_ui = 1
+
+" Activate plugins in SidePanel
+let g:sidepanel_config = {}
+let g:sidepanel_config['nerdtree'] = {}
+let g:sidepanel_config['tagbar'] = {}
+let g:sidepanel_config['gundo'] = {}
+let g:sidepanel_config['buffergator'] = {}
+let g:sidepanel_config['vimfiler'] = {}
+let g:sidepanel_config['defx'] = {}
+"''''''''''''''end sidepanel
+
+"broken<F3>
 "let g:ctrlp_match_func = {'match' : 'matcher#cmatch' }
+let g:ctrlp_match_func = {'match': 'cpsm#CtrlPMatch'}
 "let g:vim_tags_auto_generate = 1
 let g:syntastic_auto_loc_list = 0
 
 let g:better_whitespace_ctermcolor='red'
+
+
+function! CtrlPCommand()
+    let c = 0
+    let wincount = winnr('$')
+    " Don't open it here if current buffer is not writable (e.g. NERDTree)
+    while !empty(getbufvar(+expand("<abuf>"), "&buftype")) && c < wincount
+        exec 'wincmd w'
+        let c = c + 1
+    endwhile
+    exec 'CtrlP'
+endfunction
+
+let g:ctrlp_cmd = 'call CtrlPCommand()'
+
+
 "let g:strip_whitespace_on_save = 1
 cnoreabbrev
 colorscheme industry
@@ -187,7 +244,10 @@ Plugin 'xolox/vim-notes'
 Plugin 'vim-misc'
 
 "different ctrlp searching algorithm
-Plugin 'JazzCore/ctrlp-cmatcher'
+""""" broken""""""Plugin 'JazzCore/ctrlp-cmatcher'
+""""""""Plugin 'burke/matcher'
+
+Plugin 'nixprime/cpsm'
 
 ":CodeClimateAnalyzeProject
 ":CodeClimateAnalyzeOpenFiles
@@ -200,6 +260,15 @@ Plugin 'rafi/awesome-vim-colorschemes'
 
 Plugin 'vim-vdebug/vdebug'
 
+Plugin 'airblade/vim-gitgutter'
+
+Plugin 'xolox/vim-session'
+
+"Plugin 'miyakogi/sidepanel.vim'
+
+"syntax checking
+Plugin 'vim-syntastic/syntastic'
+
 Bundle 'vim-ruby/vim-ruby'
 " Surround your code :)
 Bundle 'tpope/vim-surround'
@@ -207,6 +276,7 @@ Bundle 'tpope/vim-surround'
 Bundle 'ervandew/supertab'
 " All of your Plugins must be added before the following line
 "
+Bundle 'OmniSharp/omnisharp-vim'
 call vundle#end()            " required
 
 
