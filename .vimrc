@@ -1,3 +1,5 @@
+#TTOOOP
+
 set number
 set nocompatible      " We're running Vim, not Vi!
 set incsearch
